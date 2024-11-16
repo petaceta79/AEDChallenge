@@ -43,7 +43,9 @@ def dividir_array(array):
 # Funcion que elige el idioma dominante
 def idiomaDominante(lista_idiomas): 
     for i in lista_idiomas:
-        if (i == "Spanish"):
+        if (i == "Catalan"):
+            return "Catalan"
+        elif (i == "Spanish"):
             return "Spanish"
     return "English"
 
@@ -138,3 +140,4 @@ for i in Grupos:
     GruposNombres.append(array)
 
 print(GruposNombres)
+print(idiomaDominante(participants[9].preferred_languages))

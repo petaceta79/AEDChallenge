@@ -8,4 +8,4 @@ data_path = "data/datathon_participants.json"
 participants = load_participants(data_path)
 
 # Acceder al nombre del primer participante
-print(participants[0].name)
+print(participants[0])
