@@ -112,3 +112,12 @@ for i in participants:
             Grupos.append(subGrupo)
 
 # Caso sobrantes 
+GrupoTemp = []
+for i in participants:
+    if (not EstaEnGrupo(Grupos,i.id)): 
+        GrupoTemp.append(i.id)
+if (len(GrupoTemp) >= 4):
+        array = dividir_array(GrupoTemp)
+        for subGrupo in array:
+            Grupos.append(subGrupo)
+
