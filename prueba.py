@@ -39,7 +39,9 @@ for i, participant_i in enumerate(participants, start=1):
         if i != e: 
             revision.append([participant_e.name,0])
             revision[-1][1] += Amigos(participant_i,participant_e,100)
-        
+            if (revision[-1][1] > 0):
+                print("llego")        
+
      
             
 
