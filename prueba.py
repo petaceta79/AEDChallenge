@@ -59,8 +59,6 @@ def EstaEnGrupo(grupo, cosa):
 
 
 
-
-
 # Ruta al archivo JSON
 data_path = "data/datathon_participants.json"
 # Cargar participantes
@@ -74,6 +72,24 @@ GrupoTemp = []
 
 
 # codigo 
+
+# Todas condicion
+for i in participants: 
+    GrupoTemp = []
+    GrupoTemp.append(i.id)
+    if (not EstaEnGrupo(Grupos,i.id)): 
+        for e in participants:
+            if (i != e and not EstaEnGrupo(Grupos,e.id)):
+                if (idiomaDominante(e.preferred_languages) == idiomaDominante(i.preferred_languages)):
+                    if (asignar_cluster(e.objective) == asignar_cluster(i.objective)):
+                        if (e.experience_level == i.experience_level):
+                            if (i.age > (e.age - 1) and i.age < (e.age + 1)):
+                                GrupoTemp.append(e.id)
+    if (len(GrupoTemp) >= 4):
+        array = dividir_array(GrupoTemp)
+        for subGrupo in array:
+            Grupos.append(subGrupo)
+
 # Primera condicion
 for i in participants: 
     GrupoTemp = []
@@ -140,4 +156,3 @@ for i in Grupos:
     GruposNombres.append(array)
 
 print(GruposNombres)
-print(idiomaDominante(participants[9].preferred_languages))

@@ -5,6 +5,21 @@ from participant import load_participants
 
 # Funciones 
 
+# Dado el id devuele el objeto
+def get_person_by_id(participants, id):
+    for participant in participants:
+        if participant.id == id:
+            return participant
+    return None  # Devuelve None si no encuentra el ID
+
+# Devuelve false en caso que su rol este ya repetido 
+def repe_rol(GrupoTemp, rol, participants):
+    for i in GrupoTemp:
+        if (get_person_by_id(participants, i).preferred_role == rol):
+            return False
+    return True
+
+
 # Objetivos 
 # Función para detectar el grupo de palabras clave en una descripción
 def asignar_cluster(descripcion):
@@ -27,6 +42,12 @@ def asignar_cluster(descripcion):
     max_categoria = max(scores, key=scores.get)
     return max_categoria
 
+def ChangeIdName(personas, id):
+    for persona in personas:
+        if persona.id == id:  # Acceso al atributo en lugar de clave de diccionario
+            return persona.name
+    return None  # Devuelve None si no se encuentra el id
+    
 # Funcion para dividir un array en 4 y eliminar los sobrantes
 def dividir_array(array):
     # Dividimos el array en bloques de 4 elementos
@@ -37,7 +58,9 @@ def dividir_array(array):
 # Funcion que elige el idioma dominante
 def idiomaDominante(lista_idiomas): 
     for i in lista_idiomas:
-        if (i == "Spanish"):
+        if (i == "Catalan"):
+            return "Catalan"
+        elif (i == "Spanish"):
             return "Spanish"
     return "English"
 
@@ -47,6 +70,7 @@ def EstaEnGrupo(grupo, cosa):
         if (cosa in i):
             return True
     return False
+
 
 
 
@@ -61,8 +85,43 @@ participants = load_participants(data_path)
 Grupos = []
 GrupoTemp = []
 
-
 # codigo 
+
+# Todas condicion
+for i in participants: 
+    GrupoTemp = []
+    GrupoTemp.append(i.id)
+    if (not EstaEnGrupo(Grupos,i.id)): 
+        for e in participants:
+            if (i != e and not EstaEnGrupo(Grupos,e.id)):
+                if (idiomaDominante(e.preferred_languages) == idiomaDominante(i.preferred_languages)):
+                    if (asignar_cluster(e.objective) == asignar_cluster(i.objective)):
+                        if (repe_rol(GrupoTemp, e.preferred_role, participants)):
+                            if (e.experience_level == i.experience_level):
+                                if (i.age > (e.age - 1) and i.age < (e.age + 1)):
+                                    GrupoTemp.append(e.id)
+    if (len(GrupoTemp) >= 4):
+        array = dividir_array(GrupoTemp)
+        for subGrupo in array:
+            Grupos.append(subGrupo)
+
+# Todas condicion
+for i in participants: 
+    GrupoTemp = []
+    GrupoTemp.append(i.id)
+    if (not EstaEnGrupo(Grupos,i.id)): 
+        for e in participants:
+            if (i != e and not EstaEnGrupo(Grupos,e.id)):
+                if (idiomaDominante(e.preferred_languages) == idiomaDominante(i.preferred_languages)):
+                    if (asignar_cluster(e.objective) == asignar_cluster(i.objective)):
+                        if (repe_rol(GrupoTemp, e.preferred_role, participants)):
+                            if (e.experience_level == i.experience_level):
+                                GrupoTemp.append(e.id)
+    if (len(GrupoTemp) >= 4):
+        array = dividir_array(GrupoTemp)
+        for subGrupo in array:
+            Grupos.append(subGrupo)
+
 # Primera condicion
 for i in participants: 
     GrupoTemp = []
@@ -109,4 +168,23 @@ for i in participants:
             Grupos.append(subGrupo)
 
 # Caso sobrantes 
-print(Grupos)  
+GrupoTemp = []
+for i in participants:
+    if (not EstaEnGrupo(Grupos,i.id)): 
+        GrupoTemp.append(i.id)
+if (len(GrupoTemp) >= 4):
+        array = dividir_array(GrupoTemp)
+        for subGrupo in array:
+            Grupos.append(subGrupo)
+
+
+# Crear array con los nombres 
+GruposNombres = []
+
+for i in Grupos:
+    array = []
+    for e in i:  # Supongo que quieres iterar sobre los elementos de cada grupo en 'Grupos'
+        array.append(ChangeIdName(participants, e))
+    GruposNombres.append(array)
+
+print(GruposNombres[0])
