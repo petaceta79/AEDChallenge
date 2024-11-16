@@ -1,0 +1,60 @@
+Estructura de Archivos
+calculate_score.py: Contendrá la función calculate_score.
+score_matrix.py: Contendrá build_score_matrix.
+clustering.py: Contendrá cluster_participants.
+load_participants.py: Contendrá load_participants.
+main.py: Archivo principal que integra todo.
+
+calculate_Score: 
+
+Este código calcula un "puntaje de compatibilidad" entre dos personas (p1 y p2) en función de varios criterios. Aquí te dejo una explicación sencilla para que la puedas usar en tu presentación:
+
+1. **Amistad**: Si alguna de las dos personas está registrada como amiga de la otra, se suman 5000 puntos.
+2. **Idioma**: Si ambas personas hablan al menos un idioma en común, se suman 500 puntos.
+3. **Nivel de experiencia**: Si ambas personas tienen el mismo nivel de experiencia, se suman 400 puntos.
+4. **Edad**: Si las dos personas tienen la misma edad, se suman 300 puntos.
+5. **Objetivo**: Si las personas tienen el mismo objetivo, se suman 200 puntos.
+6. **Universidad**: Si ambas personas estudiaron en la misma universidad, se suman 100 puntos.
+Al final, el código devuelve la cantidad total de puntos obtenidos según estas condiciones.
+
+
+score_matrix:
+
+Este código crea una matriz de puntajes de compatibilidad entre todos los participantes.
+
+1. **Matriz vacía**: Se inicializa una matriz de ceros de tamaño `n x n`, donde `n` es el número de participantes.
+2. **Cálculo de puntajes**: Para cada par de participantes (i, j), se calcula su puntaje utilizando la función `calculate_score`.
+3. **Asignación de puntajes**: Los puntajes calculados se asignan en las posiciones `[i, j]` y `[j, i]` de la matriz, ya que la relación es simétrica.
+4. **Resultado**: Devuelve la matriz de puntajes.
+
+clustering:
+
+Este código agrupa a los participantes en equipos basados en sus puntuaciones de compatibilidad utilizando un algoritmo de **clustering jerárquico**.
+
+1. **Conversión a distancias**: La matriz de puntajes se convierte en una matriz de distancias, donde se utiliza la fórmula `1 / (1 + score_matrix)` para invertir los puntajes (puntajes más altos corresponden a distancias más bajas).
+2. **Preprocesamiento**: Se asegura que no haya valores inválidos (como NaN o infinitos) en la matriz de distancias y se ajusta la diagonal a cero (ya que un participante no se puede agrupar consigo mismo).
+3. **Clustering jerárquico**: Se realiza el clustering jerárquico utilizando el método `linkage` y luego se determina el número de grupos necesarios para cumplir con el tamaño máximo de grupo mediante la función `fcluster`.
+4. **Organización inicial en grupos**: Los participantes son organizados en grupos basados en el resultado del clustering.
+5. **Optimización de grupos**: Dentro de cada grupo, los participantes se ordenan según su puntaje total, y luego se seleccionan hasta el tamaño máximo de grupo, asegurando que no haya duplicados.
+6. **Asignación de participantes restantes**: Si hay participantes sin grupo, se añaden a los grupos existentes respetando el tamaño máximo de grupo.
+7. **Resultado**: Devuelve los grupos finales con los participantes asignados.
+
+load_participants:
+
+Este código carga los datos de los participantes desde un archivo JSON.
+
+1. **Construcción de la ruta del archivo**: Utiliza `os.path.join()` para construir la ruta absoluta del archivo JSON, basándose en la ubicación del script y el nombre del archivo proporcionado.
+2. **Carga del archivo JSON**: Abre el archivo en modo lectura (`"r"`) y usa `json.load(file)` para cargar el contenido del archivo en formato JSON y convertirlo en un objeto de Python (como una lista o diccionario).
+3. **Retorno de los datos**: Devuelve los datos cargados desde el archivo JSON, que contienen la información de los participantes.
+
+main:
+
+Este código principal coordina todo el proceso de carga de datos, cálculo de puntuaciones, agrupamiento y presentación de los resultados. Aquí está su explicación:
+
+1. **Carga de participantes**: Llama a la función `load_participants()` para cargar los datos de los participantes desde un archivo JSON llamado `datathon_participants.json`.
+2. **Creación de la matriz de puntuación**: Usa la función `build_score_matrix()` para calcular una matriz de puntuación entre los participantes, basada en diferentes características como idioma, edad, amistad, etc.
+3. **Agrupamiento de participantes**: Llama a la función `cluster_participants()` para agrupar a los participantes en equipos, usando la matriz de puntuación generada previamente. 
+4. **Mostrar los resultados**: Imprime los grupos resultantes con sus miembros. Para cada grupo, muestra los nombres de los participantes que lo componen.
+5. **Ejecutar la función principal**: `if __name__ == "__main__": main()` asegura que `main()` se ejecute solo cuando el script se ejecuta directamente, no cuando es importado como un módulo en otro script.
+
+Este flujo permite gestionar los participantes y asignarlos de manera eficiente a grupos basados en sus puntuaciones mutuas.
