@@ -27,6 +27,12 @@ def asignar_cluster(descripcion):
     max_categoria = max(scores, key=scores.get)
     return max_categoria
 
+def ChangeIdName(personas, id):
+    for persona in personas:
+        if persona.id == id:  # Acceso al atributo en lugar de clave de diccionario
+            return persona.name
+    return None  # Devuelve None si no se encuentra el id
+    
 # Funcion para dividir un array en 4 y eliminar los sobrantes
 def dividir_array(array):
     # Dividimos el array en bloques de 4 elementos
@@ -121,3 +127,14 @@ if (len(GrupoTemp) >= 4):
         for subGrupo in array:
             Grupos.append(subGrupo)
 
+
+# Crear array con los nombres 
+GruposNombres = []
+
+for i in Grupos:
+    array = []
+    for e in i:  # Supongo que quieres iterar sobre los elementos de cada grupo en 'Grupos'
+        array.append(ChangeIdName(participants, e))
+    GruposNombres.append(array)
+
+print(GruposNombres)
