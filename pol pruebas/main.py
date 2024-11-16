@@ -6,19 +6,12 @@ from clustering import cluster_participants
 
 def main():
     # Cargar participantes
-    participants = load_participants("participants.json")
+    participants = load_participants("datathon_participants.json")
 
     # Crear matriz de puntuación
     score_matrix = build_score_matrix(participants)
 
-    # Convertir la matriz de puntuación en distancias
-    distances = 1 / (1 + score_matrix)
-    condensed_distances = squareform(distances)
-
-    # Realizar clustering jerárquico
-    linked = linkage(condensed_distances, method='average')
-
-    # Generar grupos respetando el tamaño máximo
+    # Agrupar participantes
     groups = cluster_participants(score_matrix, participants)
 
     # Mostrar resultados
