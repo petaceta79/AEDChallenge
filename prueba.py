@@ -4,14 +4,52 @@ from participant import load_participants
 
 
 # Funciones 
-def calculate_score(p1):
-    score = 0
 
-    if (p1.experience_level == "Intermediate"):
-        score += 10
-    
+# Objetivos 
+# Función para detectar el grupo de palabras clave en una descripción
+def asignar_cluster(descripcion):
+    # Diccionario con las palabras clave para cada grupo
+    palabras_clave = {
+        "WIN": ["top", "win", "first", "trophy", "winning", "competitive"],
+        "FRIENDS": ["friends", "meet", "new", "people", "connections", "social"],
+        "LEARN": ["learn", "try", "abilities", "skills", "growth", "learning", "code"]
+    }
+    descripcion = descripcion.lower().strip()  # Convertir a minúsculas y eliminar espacios extra
+    scores = {categoria: 0 for categoria in palabras_clave}  # Inicializar el puntaje para cada categoría
 
-    return score
+    # Para cada categoría, contar cuántas veces aparece alguna de las palabras clave en la descripción
+    for categoria, palabras in palabras_clave.items():
+        for palabra in palabras:
+            if palabra in descripcion:
+                scores[categoria] += 1  # Aumentar el puntaje por cada palabra clave encontrada
+
+    # Devolver la categoría con el puntaje más alto
+    max_categoria = max(scores, key=scores.get)
+    return max_categoria
+
+# Funcion para dividir un array en 4 y eliminar los sobrantes
+def dividir_array(array):
+    # Dividimos el array en bloques de 4 elementos
+    subarrays = [array[i:i+4] for i in range(0, len(array), 4) if len(array[i:i+4]) == 4]
+    return subarrays
+
+
+# Funcion que elige el idioma dominante
+def idiomaDominante(lista_idiomas): 
+    for i in lista_idiomas:
+        if (i == "Spanish"):
+            return "Spanish"
+    return "English"
+
+# Funcion para ver si ya esta en el grupo 
+def EstaEnGrupo(grupo, cosa):
+    for i in grupo:
+        if (cosa in i):
+            return True
+    return False
+
+
+
 
 
 
@@ -23,34 +61,54 @@ participants = load_participants(data_path)
 
 
 # Inicialización de la lista de grupos
-Puntuacion = []
-grupos = []  # Lista que contendrá los grupos, cada grupo será otra lista de participantes
+Grupos = []
+GrupoTemp = []
 
 
+# codigo 
+# Primera condicion
+for i in participants: 
+    GrupoTemp = []
+    GrupoTemp.append(i.id)
+    if (not EstaEnGrupo(Grupos,i.id)): 
+        for e in participants:
+            if (i != e and not EstaEnGrupo(Grupos,e.id)):
+                if (idiomaDominante(e.preferred_languages) == idiomaDominante(i.preferred_languages)):
+                    if (asignar_cluster(e.objective) == asignar_cluster(i.objective)):
+                        if (e.experience_level == i.experience_level):
+                            GrupoTemp.append(e.id)
+    if (len(GrupoTemp) >= 4):
+        array = dividir_array(GrupoTemp)
+        for subGrupo in array:
+            Grupos.append(subGrupo)
 
-# Algoritmo para formar grupos
-for i, participant_i in enumerate(participants, start=1):
-    Puntuacion.append([participant_i.id, calculate_score(participant_i)])
+# Segunda condicion
+for i in participants:
+    GrupoTemp = []
+    GrupoTemp.append(i.id)
+    if (not EstaEnGrupo(Grupos,i.id)): 
+        for e in participants:
+            if (i != e and not EstaEnGrupo(Grupos,e.id)):
+                if (idiomaDominante(e.preferred_languages) == idiomaDominante(i.preferred_languages)):
+                    if (asignar_cluster(e.objective) == asignar_cluster(i.objective)):
+                        GrupoTemp.append(e.id)
+    if (len(GrupoTemp) >= 4):
+        array = dividir_array(GrupoTemp)
+        for subGrupo in array:
+            Grupos.append(subGrupo)
 
-Puntuacion.sort(key=lambda x: x[1])
+# Tercera condicion
+for i in participants:
+    GrupoTemp = []
+    GrupoTemp.append(i.id)
+    if (not EstaEnGrupo(Grupos,i.id)): 
+        for e in participants:
+            if (i != e and not EstaEnGrupo(Grupos,e.id)):
+                if (idiomaDominante(e.preferred_languages) == idiomaDominante(i.preferred_languages)):
+                    GrupoTemp.append(e.id)
+    if (len(GrupoTemp) >= 4):
+        array = dividir_array(GrupoTemp)
+        for subGrupo in array:
+            Grupos.append(subGrupo)
 
-
-
-for i, Puntuacio in enumerate(Puntuacion, start=1):
-    print(Puntuacio)
-      
-
-
-print("-------------------------")
-
-
-
-
-# Mostrar los grupos creados
-for i, grupo in enumerate(grupos, start=1):
-    # Imprimimos el número de grupo y los integrantes
-    print(f"{i}: {', '.join(grupo)}")
-
-
-
-
+# Caso sobrantes 

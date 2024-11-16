@@ -1,17 +1,17 @@
 import json
 
-# Diccionario con las palabras clave para cada grupo
-palabras_clave = {
-    "WIN": ["top", "win", "first", "trophy", "winning", "competitive"],
-    "FRIENDS": ["friends", "meet", "new", "people", "connections", "social"],
-    "LEARN": ["learn", "try", "abilities", "skills", "growth", "learning", "code"]
-}
 
 # Ruta del archivo JSON
 data_path = "data/datathon_participants.json"
 
 # Función para detectar el grupo de palabras clave en una descripción
-def asignar_cluster(descripcion, palabras_clave):
+def asignar_cluster(descripcion):
+    # Diccionario con las palabras clave para cada grupo
+    palabras_clave = {
+        "WIN": ["top", "win", "first", "trophy", "winning", "competitive"],
+        "FRIENDS": ["friends", "meet", "new", "people", "connections", "social"],
+        "LEARN": ["learn", "try", "abilities", "skills", "growth", "learning", "code"]
+    }
     descripcion = descripcion.lower().strip()  # Convertir a minúsculas y eliminar espacios extra
     scores = {categoria: 0 for categoria in palabras_clave}  # Inicializar el puntaje para cada categoría
 
@@ -37,9 +37,8 @@ def obtener_objetivo_participante(nombre_participante):
             # Verificamos si 'objective' está en los datos del participante
             if 'objective' in participante and participante['objective'].strip():  # Verificamos que la descripción no esté vacía
                 descripcion = participante['objective']
-                categoria_asignada = asignar_cluster(descripcion, palabras_clave)
-                return f"El objetivo de {nombre_participante} es: {categoria_asignada}"
-    return f"No se encontró un participante con el nombre: {nombre_participante}"
+                categoria_asignada = asignar_cluster(descripcion)
+                return f"{categoria_asignada}"
 
 # Ejemplo de cómo usar la función
 nombre_participante = input()  # Cambia por el nombre del participante que quieres consultar
