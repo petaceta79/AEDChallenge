@@ -1,4 +1,4 @@
 from rich import print
 from participant import load_participants
 
-print("pene")
+print("soy gay")
