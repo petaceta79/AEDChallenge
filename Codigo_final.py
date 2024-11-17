@@ -105,7 +105,7 @@ for i in participants:
         for subGrupo in array:
             Grupos.append(subGrupo)
 
-# Todas condicion
+# 1r condicion
 for i in participants: 
     GrupoTemp = []
     GrupoTemp.append(i.id)
@@ -122,7 +122,7 @@ for i in participants:
         for subGrupo in array:
             Grupos.append(subGrupo)
 
-# Primera condicion
+# 2nd condicion
 for i in participants: 
     GrupoTemp = []
     GrupoTemp.append(i.id)
@@ -138,7 +138,7 @@ for i in participants:
         for subGrupo in array:
             Grupos.append(subGrupo)
 
-# Segunda condicion
+# 3r condicion
 for i in participants:
     GrupoTemp = []
     GrupoTemp.append(i.id)
@@ -153,7 +153,7 @@ for i in participants:
         for subGrupo in array:
             Grupos.append(subGrupo)
 
-# Tercera condicion
+# 4t condicion
 for i in participants:
     GrupoTemp = []
     GrupoTemp.append(i.id)
@@ -178,6 +178,9 @@ if (len(GrupoTemp) >= 4):
             Grupos.append(subGrupo)
 
 
+
+
+# Ejemplo para visualizar los resultados
 # Crear array con los nombres 
 GruposNombres = []
 
@@ -187,4 +190,4 @@ for i in Grupos:
         array.append(ChangeIdName(participants, e))
     GruposNombres.append(array)
 
-print(GruposNombres[0])
+print(GruposNombres)
