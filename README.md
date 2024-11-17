@@ -1,10 +1,3 @@
-
-Aquí tienes un ejemplo de un archivo README.txt que puedes utilizar:
-
-shell
-Copiar código
-# README.txt
-
 ## Proyecto: Datathon FME
 
 ### Descripción:
